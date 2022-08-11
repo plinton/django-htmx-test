@@ -1,0 +1,45 @@
+<section id=todo-list>
+  {% for item in items %}
+    <form id="todo-list"
+          action="#"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-target="#todo-list"
+          hx-swap="innerHTML">
+
+          <input name="description"
+                 type="text"
+                 autocomplete="off"
+                 hx-put="/todo/"
+                 hx-trigger="keyup changed delay:100ms"
+                 value="{{ item.description }}"
+                 hx-vars="id:{{item.pk}}"
+          ></input>
+          {% if item.done_at %}
+          <input name="done"
+                 hx-put="/todo/"
+                 type="checkbox"
+                 hx-vars="id:{{item.pk}},done:true"
+          ></input>
+          {% else %}
+          <input name="done"
+                 hx-put="/todo/"
+                 type="checkbox"
+                 value="true"
+                 hx-vars="id:{{item.pk}},done:false"
+          ></input>
+          {% endif %}
+        </form>
+  {% endfor %}
+  <form id="new-todo"
+        action="#"
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+        hx-target="#todo-list"
+        hx-swap="innerHTML">
+
+    <input name="description"
+           type="text"
+           autocomplete="off" hx-post="/todo/"
+           hx-trigger="keyup changed delay:100ms">
+    </input>
+  </section>
+
